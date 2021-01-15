@@ -14,14 +14,18 @@ module.exports = () => {
     .then(() => {
       console.log(`Connected to ${db}.`);
     })
-    .catch((err) => console.log("err.message"));
+    .catch((err) => console.log(err.message));
 
   // reset collection
   mongoose.connection
     .collection("pricelists")
     .drop()
-    .then(() => console.log("Preparing initial dataset..."))
-    .catch((err) => console.log(err.message));
+    .then(() => console.log("Reset dataset collection..."))
+    .catch((err) => {
+      if (err.message !== "ns not found") {
+        console.log(err.message);
+      } else console.log("Initializing database...");
+    });
 
   // convert CSV to JSON
   csvtojson({
